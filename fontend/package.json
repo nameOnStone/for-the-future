@@ -15,6 +15,7 @@
     "core-js": "^3.8.3",
     "echarts": "^5.4.3",
     "element-plus": "^2.3.8",
+    "highcharts-vue": "^1.4.3",
     "sass": "^1.64.1",
     "sass-loader": "^13.3.2",
     "vue": "^3.2.13",

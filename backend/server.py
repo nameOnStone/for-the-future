@@ -61,7 +61,8 @@ if __name__ == "__main__":
     #server.serve_forever()
     #os.system(redis_CMD)
     #os.system(f"./{celery_CMD} -A {binpath}/service.py worker -l info")
-    app.run(host='172.19.154.77', port=9999, debug=True)
+    ip = 'localhost'
+    app.run(host=ip, port=9999, debug=False)
 #    from waitress import serve
 #    serve(app, host="192.168.1.97", port=9999)
 

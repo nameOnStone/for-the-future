@@ -12,5 +12,4 @@ def main(path_of_file, start=0, end=10):
 
 
 if __name__ == "__main__":
-    print(main("dbSamples/PN220258_D.normal.filtered.vep.filtered.maf", start=0, end=10))
-    #print(get_trunck_file("dbSamples/97H-0110.featurecount.gene_id.tpm.txt", start=10, end=20))
+    pass

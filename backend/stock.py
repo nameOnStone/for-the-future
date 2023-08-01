@@ -5,7 +5,7 @@ import time
 import numpy as np
 import akshare as ak
 #import tushare as ts
-from pprint import pprint
+#from pprint import pprint
 
 
 def return_ndays(start_time, days, trade_date, activate=False):
@@ -45,7 +45,7 @@ def return_ndays(start_time, days, trade_date, activate=False):
             if_exchage_day = trade_date[trade_date['trade_date']==current_day]
         the_index_of_now = trade_date[trade_date['trade_date']==current_day].index[0]
     
-    the_index_of_ndays = the_index_of_now - 100
+    the_index_of_ndays = the_index_of_now - days
     if the_index_of_ndays < 0:
         sys.exit('error')
     else:
@@ -111,8 +111,8 @@ def is_max_price_of_100days_in_the_stock(line):
     price_of_this_stock_100days = price_of_this_stock_101days[1: 101] 
 
 
-    # ST 股票去除；
-    if "ST" in name:
+    # ST 股票去除 or 北京股市去除 or  特别的“科林退“（不懂这个退了为啥叫这个鬼名字）；
+    if "ST" in name or code.startswith("83") or name == "科林退":
         return {
             'code': code, 
             'max_price_in_100days': 0, 
@@ -178,6 +178,8 @@ def is_max_price_of_100days_in_the_stock(line):
 
     
     how_far_days = the_index_of_lastest_days - the_index_of_max_price
+    # if how_far_days == 99:
+    #     pdb.set_trace()
     print('the_index_of_lastest_days - the_index_of_max_price->', how_far_days)
     #  floating_precentage_of_price_per_day = floating_precentage_of_price / (the_index_of_lastest_days - the_index_of_max_price)
 
@@ -204,7 +206,7 @@ stock_zh_list = ak.stock_zh_a_spot_em()
 
 trade_date_hist_sina = ak.tool_trade_date_hist_sina()
 now = datetime.datetime.now()
-date_of_101days = return_ndays(now, 101, trade_date_hist_sina, activate=True)
+date_of_101days = return_ndays(now, 100, trade_date_hist_sina, activate=True)
 
 
 details_of_100days = stock_zh_list.apply(is_max_price_of_100days_in_the_stock, axis=1)

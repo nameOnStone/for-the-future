@@ -1,3 +1,4 @@
+import sys
 import datetime
 import pandas as pd
 import pdb
@@ -58,8 +59,8 @@ def return_ndays(start_time, days, trade_date, activate=False):
     print('last100day->', recent_day)
     recent_day_stf = recent_day.strftime('%Y%m%d')
     return {
+        'start_day': recent_day_stf,
         'end_day': current_day_stf, 
-        'start_day': recent_day_stf
     }
 
 
@@ -67,7 +68,6 @@ def return_ndays(start_time, days, trade_date, activate=False):
 
 
 trade_date_hist_sina = ak.tool_trade_date_hist_sina()
-
 
 stock_zh_list = ak.stock_zh_a_spot_em()
 stock_zh_codes = stock_zh_list['代码']
@@ -94,16 +94,17 @@ def get_max_price_of_codes(stock_zh_codes, start_date, end_date):
                 "industry": industry, 
                 "is_max_price_of_100days": False
                 }
-        for start in range(-101, -len(hist), -100):
-            if start == -101:
-                end = len(hist)
-            else:
-                end = start + 100
-            
+            continue
+        for end in range(len(hist), 0, -1):
+            print(end, file=sys.stderr)
+            start = end - 100
             select_start_date = hist.iloc[start]['日期']
             select_end_date = hist.iloc[end-1]['日期']
             current_price = hist.iloc[end-1]['收盘']
-            max_price = hist.iloc[start: end]['收盘'].max()
+            window_of_hist = hist.iloc[start: end]['收盘']
+            if len(window_of_hist) < 100:
+                break
+            max_price = window_of_hist.max()
             yield {
                 "code": code, 
                 "select_start_date": select_start_date,

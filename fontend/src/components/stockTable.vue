@@ -3,7 +3,7 @@
     <!-- :defaultColDef="defaultColDef" -->
   <ag-grid-vue
     class="ag-theme-alpine"
-    style="height: 500px"
+    style="height: 400px"
     :columnDefs="columnDefs.value"
     :rowData="rowData.value"
     rowSelection="multiple"
@@ -38,9 +38,9 @@ export default {
     // Each Column Definition results in one Column.
     const columnDefs = reactive({
       value: [
-            { field: "序号" , width:120, 'pinned': 'left'},
+            { field: "序号" , width:100, 'pinned': 'left'},
             { field: "代码" , width:100, 'pinned': 'left'},
-            { field: "名称" , width:100, 'pinned': 'left'},
+            { field: "名称" , width:120, 'pinned': 'left'},
             { field: "最新价" , width:100},
             { field: "涨跌幅" , width:100},
             { field: "涨跌额" , width:100},
@@ -63,9 +63,9 @@ export default {
             { field: "年初至今涨跌幅" },
             { field: "是否百日新高", filter: "agTextColumnFilter"},
             { field: "百日新高价格" },
-            { field: "所属行业" },
+            { field: "所属行业", filter: "agTextColumnFilter"},
             { field: "距百日新高有多少个交易日" },
-            { field: "百日标准差" },
+            { field: "百日标准差", filter: "agNumberColumnFilter"},
             { field: "连涨天数" },
             { field: "昨日新高与今日新高", filter: "agTextColumnFilter" },
             { field: "所属行业新高股票数"},
@@ -81,7 +81,7 @@ export default {
 
     // Example load data from server
     onMounted(() => {
-      fetch("http://172.19.154.77:9999/db/test")
+      fetch("http://localhost:9999/db/test")
         .then((result) => result.json())
         .then((remoteRowData) => (rowData.value = remoteRowData));
     });
