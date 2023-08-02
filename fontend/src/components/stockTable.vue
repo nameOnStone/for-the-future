@@ -92,7 +92,13 @@ export default {
       rowData,
       defaultColDef,
       cellWasClicked: (event) => { // Example of consuming Grid Event
-        console.log("cell was clicked", event);
+        // console.log(event);
+        if (event.column.instanceId === 2 | event.column.instanceId === 1){
+          var code = event.data['代码']
+          // console.log(`https://gushitong.baidu.com/stock/ab-${code}`)
+          window.open(`https://gushitong.baidu.com/stock/ab-${code}`)
+        }
+
       },
       deselectRows: () =>{
         gridApi.value.deselectAll()
