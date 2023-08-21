@@ -11,7 +11,7 @@ import akshare as ak
 def return_ndays(start_time, days, trade_date, activate=False):
     now = start_time
     #  now = datetime.datetime(2023, 7, 26, 15, 13, 56, 177376)
-    print('now->', now)
+    print('now->', now, flush=True)
     if activate:
         activate_start_time = datetime.datetime.strptime(
                 str(datetime.datetime.now().date()) + '9:30', '%Y-%m-%d%H:%M'
@@ -52,9 +52,9 @@ def return_ndays(start_time, days, trade_date, activate=False):
         last100day = trade_date.iloc[the_index_of_ndays]['trade_date']
             
 
-    print('current_day->', current_day)
+    print('current_day->', current_day, flush=True)
     current_day_stf = current_day.strftime("%Y%m%d")
-    print('last100day->', last100day)
+    print('last100day->', last100day, flush=True)
     last100day_stf = last100day.strftime('%Y%m%d')
     return {
         'today': current_day_stf, 
@@ -96,7 +96,7 @@ def is_max_price_of_100days_in_the_stock(line):
         details_individual_info = ak.stock_individual_info_em(symbol=code)
         industry = details_individual_info.loc[details_individual_info.item == '行业', 'value'].to_list()[0]
     except:
-        time.sleep(3)
+        time.sleep(10)
         num += 1
         print(f"开始{num}次执行此{code}票", flush=True)
         price_of_this_stock_101days = ak.stock_zh_a_hist(symbol=code, period="daily", start_date=start_date, end_date=end_date, adjust="qfq")
@@ -206,6 +206,7 @@ stock_zh_list = ak.stock_zh_a_spot_em()
 
 trade_date_hist_sina = ak.tool_trade_date_hist_sina()
 now = datetime.datetime.now()
+#now = datetime.datetime(2023, 8, 14, 15, 13, 56, 177376)
 date_of_101days = return_ndays(now, 100, trade_date_hist_sina, activate=True)
 
 
@@ -221,6 +222,6 @@ stock_zh_list['连涨天数'] = pd.Series([obj['days_of_lianzhang'] for obj in d
 stock_zh_list['昨日新高与今日新高'] = pd.Series([obj['is_still_new_max_price'] for obj in details_of_100days])
 stock_zh_list['所属行业新高股票数'] = pd.Series([len(stock_zh_list[ (stock_zh_list['是否百日新高']==True) & (stock_zh_list['所属行业']==industry) ])  for industry in stock_zh_list['所属行业']])
 #stock_zh_list.to_csv("stock_list.xls", sep='\t', encoding='gbk', index=False)
-with pd.ExcelWriter(f"stock_list.{date_of_101days['today']}.xlsx") as writer:
+with pd.ExcelWriter(f"./db/stock_list.{date_of_101days['today']}.xlsx") as writer:
     stock_zh_list.to_excel(writer, sheet_name=f"{date_of_101days['today']}", index=False)
 print('finished...', flush=True)
